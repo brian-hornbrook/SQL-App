@@ -20,11 +20,36 @@ class User(db.Model):
 	email = db.Column(db.String(120), unique=True, nullable=False)
 	about_me = db.Column(db.String(500), unique=False, nullable=False)
 
-def __repr__(self):
-	return "<Welcome to the profile of Brian >"
+	def __repr__(self):
+		return f"<Welcome to the profile of {self.username}>"
+
+db.create_all()
+db.session.commit()
+		
+# create instances of user
+new_user1 = User(id=1, username="Hannah", email="HappyHannah@gmail.com", about_me="I love snacks, running, and sassy attitudes!")
+new_user2 = User(id=2, username="Jeorge", email="HappyGeorge@gmail.com", about_me="I love eating bananas, climing trees")
+
+# Create
+db.session.add(new_user1)
+db.session.add(new_user2)
+db.session.commit()
+
+# Read
+all_users = User.query.all()
+print(all_users)
+
+# Delete
+user = User.query.filter_by(username="Hannah").first()
+if user:
+	db.session.delete(user)
+	db.session.commit()
+
+all_users = User.query.all()
+print(all_users)
 
 @app.route('/')
 def index():
-    return 'Hello from Flask!'
+    return "Welcome to User App"
 
 app.run(host='0.0.0.0', port=8000)
